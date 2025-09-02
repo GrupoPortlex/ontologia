@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lugar - Taxonomía</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            background: linear-gradient(90deg, #ecf0f1, transparent);
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin-top: 25px;
+        }
+        
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 20px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botones colapsibles principales */
+        .collapsible {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible:hover, .collapsible.active {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 20px;
+            display: none;
+            overflow: hidden;
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Botones de subsección estilo tarjeta */
+        .subsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .subsection-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsection-btn:hover {
+            background: linear-gradient(135deg, #d35400, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .subsection-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-subsecciones */
+        .subsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .subsubsection-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsection-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsection-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #9b59b6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-sub-subsecciones (cuarto nivel) */
+        .subsubsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .subsubsubsection-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsubsection-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsubsection-content {
+            display: none;
+            background: #fff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 2px solid #e74c3c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .nested-content {
+            margin-left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            margin-top: 10px;
+        }
+        
+        .definition-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .question-box {
+            background: #e8f6f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .answer-box {
+            background: #fdf2e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .example-box {
+            background: #f4f6f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-style: italic;
+        }
+        
+        /* Botón de retroceso */
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #34495e);
+            transform: translateY(-1px);
+        }
+        
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* Información de subcategoría */
+        .subcategory-info {
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #34495e;
+            font-size: 14px;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        em {
+            color: #8e44ad;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lugar</h1>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            F. LUGAR - Tabla Conceptual ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>F. LUGAR</strong></td>
+                        <td>Representan espacios</td>
+                        <td><em>per negationem</em></td>
+                        <td>Son lugares, edificios o espacios en general</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- F.1. Lugar -->
+    <div class="section">
+        <button class="collapsible">F.1. Lugar</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia lugares frente a otros representantes de otros mundos<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Son lugares, edificios o espacios en general
+            </div>
+            
+            <!-- Subcategorías principales -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('general-lugar')">GENERAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('paisaje')">PAISAJE</button>
+                <button class="subsection-btn" onclick="toggleSubsection('construcciones-partes')">TIPO DE CONSTRUCCIONES Y PARTES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('poblacion')">POBLACIÓN</button>
+                <button class="subsection-btn" onclick="toggleSubsection('territorio')">TERRITORIO</button>
+                <button class="subsection-btn" onclick="toggleSubsection('puntos-cardinales')">PUNTOS CARDINALES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('espacios-virtuales')">ESPACIOS VIRTUALES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('locomocion-lugar')">LOCOMOCIÓN</button>
+            </div>
+            
+            <!-- Contenido de GENERAL -->
+            <div class="subsection-content" id="general-lugar">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>GENERAL</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.1. General
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta lugares, edificios o espacios en general
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un espacio?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es la playa
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El caudal del Sil
+                </div>
+            </div>
+            
+            <!-- Contenido de PAISAJE -->
+            <div class="subsection-content" id="paisaje">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>PAISAJE</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.2. Paisaje
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta espacios atendiendo a características o atributos paisajísticos
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('paisaje-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('paisaje-nombre-propio')">NOMBRE PROPIO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('acuatico-paisaje')">ACUÁTICO</button>
+                </div>
+
+                <div class="subsubsection-content" id="paisaje-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un espacio relativo al paisaje?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el desierto
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El olor del campo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="paisaje-nombre-propio">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de un espacio relativo al paisaje?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el Everest
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La escalada al Moncayo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="acuatico-paisaje">
+                    <h4>ACUÁTICO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('acuatico-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('acuatico-nombre-propio')">NOMBRE PROPIO</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="acuatico-general">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un espacio acuático?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el mar
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El caudal del río
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="acuatico-nombre-propio">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de un espacio acuático?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el Mediterráneo
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La belleza del Nilo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de TIPO DE CONSTRUCCIONES Y PARTES -->
+            <div class="subsection-content" id="construcciones-partes">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>TIPO DE CONSTRUCCIONES Y PARTES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.3. Tipo de construcciones y partes
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta tipos de construcciones y sus partes
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('construccion-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('habitacion')">HABITACIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('parte-construccion')">PARTE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('tipo-construccion')">TIPO</button>
+                </div>
+
+                <div class="subsubsection-content" id="construccion-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata una construcción?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es un hotel
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El ruido en el aeropuerto
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="habitacion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata una habitación?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el dormitorio
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El olor de la cocina
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="parte-construccion">
+                    <h4>PARTE</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('parte-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('material-construccion')">MATERIAL</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="parte-general">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una parte de una construcción?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es la ventana
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El ancho de la ventana
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="material-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de material de una construcción?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es una teja
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La baldosa del cuarto de baño
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="tipo-construccion">
+                    <h4>TIPO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('tipo-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('desplazamiento-construccion')">DESPLAZAMIENTO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('medicina-construccion')">MEDICINA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('jurisprudencia-construccion')">JURISPRUDENCIA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('empresarial-construccion')">EMPRESARIAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('domicilio-construccion')">DOMICILIO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('educacion-construccion')">EDUCACIÓN</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="tipo-general">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es la catedral
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La belleza de la catedral
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="desplazamiento-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción ligado a situaciones de desplazamiento?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un hotel
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La sencillez del albergue
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="medicina-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción ligado a la medicina?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el ambulatorio
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La limpieza del hospital
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="jurisprudencia-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción ligado a la jurisprudencia?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el juzgado
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La soledad de la cárcel
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="empresarial-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción ligado al mundo empresarial?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es una editorial
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Las ganancias de las eléctricas
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="domicilio-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción habitacional?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el domicilio familiar
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El regreso a la vivienda
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="educacion-construccion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un tipo de construcción ligado a la educación?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un colegio
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La limpieza de la escuela
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de POBLACIÓN -->
+            <div class="subsection-content" id="poblacion">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>POBLACIÓN</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.4. Población
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta poblaciones y sus partes
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('poblacion-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('urbanismo')">URBANISMO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('ciudad')">CIUDAD</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('pais')">PAÍS</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('continente')">CONTINENTE</button>
+                </div>
+
+                <div class="subsubsection-content" id="poblacion-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una población?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la capital
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La vida en el pueblo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="urbanismo">
+                    <h4>URBANISMO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('via')">VÍA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('puente')">PUENTE</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('canal')">CANAL</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="via">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una construcción urbanística de paso?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es una avenida
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La presencia de manifestantes en la calle
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="puente">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una construcción urbanística una población de paso elevado?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es una pasarela
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Su presencia en el puente
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="canal">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una construcción urbanística una población de paso cubierto marítimo o terrestre?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un canal
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Su huida por el túnel
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="ciudad">
+                    <h4>CIUDAD</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ciudad-nombre-propio')">NOMBRE PROPIO</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ciudad-nombre-propio">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de una ciudad?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es Santiago
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Su estancia en Berlín
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="pais">
+                    <h4>PAÍS</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('pais-nombre-propio')">NOMBRE PROPIO</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="pais-nombre-propio">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de un país?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es Chile
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Su viaje a España
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="continente">
+                    <h4>CONTINENTE</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('continente-nombre-propio')">NOMBRE PROPIO</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="continente-nombre-propio">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de un continente?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es África
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Sus dificultades en Europa
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de TERRITORIO -->
+            <div class="subsection-content" id="territorio">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>TERRITORIO</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.5. Territorio
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta territorios y sus partes
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('territorio-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('isla')">ISLA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('area')">ÁREA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('parte-territorio')">PARTE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('territorio-nombre-propio')">NOMBRE PROPIO</button>
+                </div>
+
+                <div class="subsubsection-content" id="territorio-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de territorio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es una región
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El incendio de la aldea
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="isla">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una isla como territorio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, son las Cíes
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La hermosura de las Antillas
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="area">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del área de un territorio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la zona norte
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La suciedad del terreno
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="parte-territorio">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de una parte del territorio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el centro
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El peligro del frente
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="territorio-nombre-propio">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata del nombre de un territorio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la Bretaña
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La hermosura de la Toscana
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de PUNTOS CARDINALES -->
+            <div class="subsection-content" id="puntos-cardinales">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>PUNTOS CARDINALES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.6. Puntos cardinales
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta puntos cardinales
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de un punto cardinal?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es el Noroeste
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La dirección hacia el Norte
+                </div>
+            </div>
+            
+            <!-- Contenido de ESPACIOS VIRTUALES -->
+            <div class="subsection-content" id="espacios-virtuales">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>ESPACIOS VIRTUALES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.7. Espacios virtuales
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta espacios virtuales
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('infraestructura')">INFRAESTRUCTURA</button>
+                </div>
+
+                <div class="subsubsection-content" id="infraestructura">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de espacio o infraestructura virtual?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es Facebook
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El acceso a la plataforma educativa
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de LOCOMOCIÓN -->
+            <div class="subsection-content" id="locomocion-lugar">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a F.1. Lugar</button>
+                <h3>LOCOMOCIÓN</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.8. Locomoción
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Presenta tipos de lugares y sus partes ligados a la locomoción
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('locomocion-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('terrestre-lugar')">TERRESTRE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('acuatico-lugar')">ACUÁTICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('aereo-lugar')">AÉREO</button>
+                </div>
+
+                <div class="subsubsection-content" id="locomocion-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de espacio ligado a la locomoción?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es una autocaravana
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El motor de la furgoneta
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="terrestre-lugar">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de espacio ligado a la locomoción terrestre?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es una camioneta
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El viaje en coche
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="acuatico-lugar">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de espacio ligado a la locomoción acuática?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es un barco
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La inestabilidad de la barca
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="aereo-lugar">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de un lugar ¿Se trata de espacio ligado a la locomoción aérea?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es un helicóptero
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El regreso en avioneta
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'F. LUGAR - Tabla Conceptual ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'F. LUGAR - Tabla Conceptual ▲';
+            }
+        }
+
+        // Función para botones colapsibles principales
+        document.addEventListener("DOMContentLoaded", function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        // Función para las subsecciones con botones estilo tarjeta
+        function toggleSubsection(id) {
+            const content = document.getElementById(id);
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            
+            // Cerrar todas las subsecciones
+            allSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-subsecciones
+        function toggleSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const parentSection = content.closest('.subsection-content');
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                // Cerrar todas las sub-subsecciones del mismo nivel
+                allSubSubsections.forEach(section => {
+                    if (section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-subsecciones (cuarto nivel)
+        function toggleSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) {
+                console.log('No se encontró elemento con id:', id);
+                return;
+            }
+            
+            // Buscar el contenedor padre más específico
+            const parentSection = content.closest('.subsubsection-content');
+            if (parentSection) {
+                // Buscar todas las sub-sub-subsecciones dentro del mismo padre
+                const allSubSubSubsections = parentSection.querySelectorAll('.subsubsubsection-content');
+                
+                // Cerrar todas las sub-sub-subsecciones del mismo nivel
+                allSubSubSubsections.forEach(section => {
+                    if (section !== content && section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para cerrar todas las subsecciones (volver a categoría principal)
+        function closeAllSubsections() {
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            allSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-subsecciones de una subsección específica
+        function closeAllSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                allSubSubsections.forEach(section => {
+                    section.style.display = 'none';
+                });
+            }
+        }
+    </script>
+
+</body>
+</html></button

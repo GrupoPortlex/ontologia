@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontología 2.0. ESMAS-ES+</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #5a6c7d;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+            font-style: italic;
+        }
+        
+        .description {
+            color: #34495e;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 30px 0 50px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botón de retorno */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        /* Grid de mundos */
+        .worlds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .world-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .world-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--card-color);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .world-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .world-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .world-title {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        
+        .world-description {
+            color: #5a6c7d;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .world-button {
+            background: var(--card-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .world-button:hover {
+            background: var(--card-color-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Colores específicos para cada mundo */
+        .mundo-animado {
+            --card-color: #27ae60;
+            --card-color-dark: #219a52;
+        }
+        
+        .mundo-material {
+            --card-color: #3498db;
+            --card-color-dark: #2980b9;
+        }
+        
+        .mundo-intelectual {
+            --card-color: #9b59b6;
+            --card-color-dark: #8e44ad;
+        }
+        
+        .situaciones-dinamicas {
+            --card-color: #e67e22;
+            --card-color-dark: #d35400;
+        }
+        
+        .situaciones-estaticas {
+            --card-color: #34495e;
+            --card-color-dark: #2c3e50;
+        }
+        
+        .lugar {
+            --card-color: #16a085;
+            --card-color-dark: #138d75;
+        }
+        
+        .unidades {
+            --card-color: #8e44ad;
+            --card-color-dark: #7d3c98;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            color: #5a6c7d;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .worlds-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .world-card {
+                padding: 20px;
+            }
+            
+            .back-button {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Ontología 2.0. ESMAS-ES+</h1>
+        <p class="subtitle">Sistema Taxonómico Integral para la Clasificación Semántica del Conocimiento</p>
+        <p class="description">
+            Una arquitectura conceptual avanzada que organiza y categoriza el conocimiento humano a través de siete mundos interconectados, 
+            facilitando la comprensión sistemática de la realidad desde lo tangible hasta lo abstracto.
+        </p>
+    </div>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            Visión General del Sistema Ontológico ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A. Mundo Animado</strong></td>
+                        <td>Presenta seres vivos</td>
+                        <td><em>per negationem</em></td>
+                        <td>Es un ser vivo, parte de un ser vivo o grupo. Puede respirar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B. Mundo Material</strong></td>
+                        <td>Presenta representantes del mundo material</td>
+                        <td><em>per negationem</em></td>
+                        <td>Es tangible/sólido/líquido/gaseoso, es visible/observable/perceptible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C. Mundo Intelectual</strong></td>
+                        <td>Presenta representantes del mundo intelectual</td>
+                        <td><em>per negationem</em></td>
+                        <td>Es abstracto, no es tangible/sólido/líquido/gaseoso, no es visible/observable/perceptible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D. Situaciones Dinámicas</strong></td>
+                        <td>Representa procesos dinámicos: procesos, acciones, actividades y situaciones</td>
+                        <td><em>per negationem</em></td>
+                        <td>Son actividades, acciones y procesos ligados al dinamismo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>E. Situaciones Estáticas</strong></td>
+                        <td>Representan situaciones estáticas: atributos, condiciones, características físicas y emocionales así como evaluaciones</td>
+                        <td><em>per negationem</em></td>
+                        <td>Son atributos, condiciones, evaluaciones, características físicas y emocionales</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F. Lugar</strong></td>
+                        <td>Representan espacios</td>
+                        <td><em>per negationem</em></td>
+                        <td>Son lugares, edificios o espacios en general</td>
+                    </tr>
+                    <tr>
+                        <td><strong>G. Unidades</strong></td>
+                        <td>Representa tipos de unidades</td>
+                        <td><em>per negationem</em></td>
+                        <td>Diferencia unidades de diferentes tipos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="worlds-grid">
+        <!-- Mundo Animado -->
+        <div class="world-card mundo-animado" onclick="navigateToWorld('mundo-animado')">
+            <div class="world-icon">👥</div>
+            <h2 class="world-title">Mundo Animado</h2>
+            <p class="world-description">
+                Seres humanos, criaturas, animales, vegetales y partes del cuerpo. 
+                Todo aquello que tiene vida y puede respirar o realizar fotosíntesis.
+            </p>
+            <button class="world-button">Explorar Mundo Animado</button>
+        </div>
+
+        <!-- Mundo Material -->
+        <div class="world-card mundo-material" onclick="navigateToWorld('mundo-material')">
+            <div class="world-icon">🔧</div>
+            <h2 class="world-title">Mundo Material</h2>
+            <p class="world-description">
+                Objetos tangibles, sustancias y todo lo perceptible por los sentidos. 
+                Desde herramientas hasta gastronomía y construcciones.
+            </p>
+            <button class="world-button">Explorar Mundo Material</button>
+        </div>
+
+        <!-- Mundo Intelectual -->
+        <div class="world-card mundo-intelectual" onclick="navigateToWorld('mundo-intelectual')">
+            <div class="world-icon">💭</div>
+            <h2 class="world-title">Mundo Intelectual</h2>
+            <p class="world-description">
+                Conceptos abstractos, ideas, contenidos y comunicación. 
+                Todo aquello que no es tangible pero forma parte del conocimiento.
+            </p>
+            <button class="world-button">Explorar Mundo Intelectual</button>
+        </div>
+
+        <!-- Situaciones Dinámicas -->
+        <div class="world-card situaciones-dinamicas" onclick="navigateToWorld('situaciones-dinamicas')">
+            <div class="world-icon">⚡</div>
+            <h2 class="world-title">Situaciones Dinámicas</h2>
+            <p class="world-description">
+                Procesos, acciones y actividades en movimiento. 
+                Desde acontecimientos naturales hasta actividades humanas intencionales.
+            </p>
+            <button class="world-button">Explorar Situaciones Dinámicas</button>
+        </div>
+
+        <!-- Situaciones Estáticas -->
+        <div class="world-card situaciones-estaticas" onclick="navigateToWorld('situaciones-estaticas')">
+            <div class="world-icon">📋</div>
+            <h2 class="world-title">Situaciones Estáticas</h2>
+            <p class="world-description">
+                Atributos, cualidades y estados emocionales o físicos. 
+                Características que definen la condición de personas, objetos o situaciones.
+            </p>
+            <button class="world-button">Explorar Situaciones Estáticas</button>
+        </div>
+
+        <!-- Lugar -->
+        <div class="world-card lugar" onclick="navigateToWorld('lugar')">
+            <div class="world-icon">🗺️</div>
+            <h2 class="world-title">Lugar</h2>
+            <p class="world-description">
+                Espacios, construcciones y territorios. 
+                Desde paisajes naturales hasta edificaciones y espacios virtuales.
+            </p>
+            <button class="world-button">Explorar Lugar</button>
+        </div>
+
+        <!-- Unidades -->
+        <div class="world-card unidades" onclick="navigateToWorld('unidades')">
+            <div class="world-icon">📏</div>
+            <h2 class="world-title">Unidades</h2>
+            <p class="world-description">
+                Sistemas de medición y ordenación cronológica. 
+                Tiempo, cantidad, medidas espaciales y sistemas de organización.
+            </p>
+            <button class="world-button">Explorar Unidades</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Ontología 2.0. ESMAS-ES+</strong> | Sistema de Clasificación Semántica Avanzada</p>
+        <p>Una herramienta integral para la organización del conocimiento y la comprensión sistemática de la realidad</p>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'Visión General del Sistema Ontológico ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'Visión General del Sistema Ontológico ▲';
+            }
+        }
+
+        // Función para navegar a cada mundo
+        function navigateToWorld(world) {
+            // Rutas configuradas para archivos en la misma carpeta
+            const worldRoutes = {
+                'mundo-animado': './mundo_animado_FIN.html',
+                'mundo-material': './mundo_material_FIN.html',
+                'mundo-intelectual': './mundo_intelectual_FIN.html',
+                'situaciones-dinamicas': './situaciones_dinamicas_FIN.html',
+                'situaciones-estaticas': './situaciones_estaticas_FIN.html',
+                'lugar': './lugar_FIN.html',
+                'unidades': './unidades_FIN.html'
+            };
+            
+            if (worldRoutes[world]) {
+                window.location.href = worldRoutes[world];
+            } else {
+                alert('Próximamente disponible: ' + world);
+            }
+        }
+
+        // Añadir efectos de hover adicionales
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.world-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

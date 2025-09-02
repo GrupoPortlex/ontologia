@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Intelectual - Taxonomía</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #8e44ad;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #8e44ad;
+            background: linear-gradient(90deg, #ecf0f1, transparent);
+            padding: 10px;
+            border-left: 4px solid #8e44ad;
+            margin-top: 25px;
+        }
+        
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #8e44ad, #e74c3c, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 20px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #7d3c98, #6c3483);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botones colapsibles principales */
+        .collapsible {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible:hover, .collapsible.active {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 20px;
+            display: none;
+            overflow: hidden;
+            background: #f9f9f9;
+            border-left: 4px solid #9b59b6;
+            margin-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Botones de subsección estilo tarjeta */
+        .subsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .subsection-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsection-btn:hover {
+            background: linear-gradient(135deg, #d35400, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .subsection-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-subsecciones */
+        .subsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .subsubsection-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsection-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsection-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-sub-subsecciones (cuarto nivel) */
+        .subsubsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .subsubsubsection-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsubsection-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsubsection-content {
+            display: none;
+            background: #fff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 2px solid #e74c3c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .nested-content {
+            margin-left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #8e44ad;
+            margin-top: 10px;
+        }
+        
+        .definition-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .question-box {
+            background: #e8f6f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .answer-box {
+            background: #fdf2e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .example-box {
+            background: #f4f6f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-style: italic;
+        }
+        
+        /* Botón de retroceso */
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #34495e);
+            transform: translateY(-1px);
+        }
+        
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* Información de subcategoría */
+        .subcategory-info {
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #34495e;
+            font-size: 14px;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        em {
+            color: #8e44ad;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mundo Intelectual</h1>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            C. Mundo Intelectual - Tabla Conceptual ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>C. Mundo Intelectual</strong></td>
+                        <td>Presenta representantes del mundo intelectual</td>
+                        <td><em>per negationem</em></td>
+                        <td>Es abstracto, no es tangible/sólido/líquido/gaseoso, no es visible/observable/perceptible</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- C.1. INTELECTUAL -->
+    <div class="section">
+        <button class="collapsible">C.1. INTELECTUAL</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Describe representantes del mundo intelectual en cuanto a su contenido.<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es abstracto, no es tangible/sólido/líquido/gaseoso, no es visible/observable/perceptible
+            </div>
+            
+            <!-- Subcategorías principales de INTELECTUAL -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('unidades-contenido')">CONTENIDO</button>
+                <button class="subsection-btn" onclick="toggleSubsection('comunicacion-intelectual')">COMUNICACIÓN</button>
+                <button class="subsection-btn" onclick="toggleSubsection('tematica')">TEMÁTICA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('sistemas-orden')">SISTEMAS DE ORDEN</button>
+            </div>
+            
+            <!-- Contenido de CONTENIDO -->
+            <div class="subsection-content" id="unidades-contenido">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a C.1. INTELECTUAL</button>
+                <h3>CONTENIDO</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.1. Contenido
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe objetos como unidades de contenido. Unidades de contenido es el nodo común a toda la categoría.<br>
+                    <strong>Relación de contraposición:</strong> Es abstracto, no es tangible, es perceptible
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-contenido')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('significado')">SIGNIFICADO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('documento-contenido')">DOCUMENTO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('texto-contenido')">TEXTO</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-contenido">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo intelectual. ¿Se presenta/discute/aborda un contenido?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute la teoría.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión de la solución, teoría, idea, asunto
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="significado">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se presenta/discute/aborda el significado de un contenido?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute el significado.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión del significado
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="documento-contenido">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se presenta/discute/aborda el contenido de un documento?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute el contenido de los nuevos estatutos.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión del acta/de los estatutos
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="texto-contenido">
+                    <h4>TEXTO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('texto-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('texto-publicado')">PUBLICADO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('texto-audiovisual')">AUDIOVISUAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('texto-digital')">DIGITAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('texto-parte')">PARTE</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="texto-general">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tipo de texto que presenta/discute/aborda un contenido?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se habla del contenido de una carta.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Discusión del texto [contenido del texto]/de la carta
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="texto-publicado">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un texto publicado que presenta/discute/aborda un contenido?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute el contenido de la nueva publicación.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión del volumen
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="texto-audiovisual">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un texto audiovisual que presenta/discute/aborda un contenido?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute el vídeo de la boda.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión del cortometraje
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="texto-digital">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un texto digital que presenta/discute/aborda un contenido?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute el contenido del blog.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Blog, tuit
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="texto-parte">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de una parte de un texto que presenta/discute/aborda un contenido?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se presenta el contenido de la nueva introducción.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión de la introducción
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de COMUNICACIÓN -->
+            <div class="subsection-content" id="comunicacion-intelectual">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a C.1. INTELECTUAL</button>
+                <h3>COMUNICACIÓN</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.2. Comunicación
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe objetos como formas de comunicación. Comunicación es el nodo común a toda la categoría.<br>
+                    <strong>Relación de contraposición:</strong> Es abstracto, no es tangible
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('lengua')">LENGUA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('enunciado')">ENUNCIADO DECLARACIÓN Y EXPRESIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('acuerdo-com')">ACUERDO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('oferta')">OFERTA</button>
+                </div>
+
+                <div class="subsubsection-content" id="lengua">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de una lengua?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el gallego.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La dificultad del gallego
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="enunciado">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de contenido de un enunciado de una acción comunicativa?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute el contenido de la pregunta.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión de la pregunta
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="acuerdo-com">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de un contenido ligado a una acción comunicativa?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute el contenido o el acuerdo en sí.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión del acuerdo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="oferta">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de contenido de una acción comunicativa?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute el contenido o la oferta en sí.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La pregunta sobre su oferta
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de TEMÁTICA -->
+            <div class="subsection-content" id="tematica">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a C.1. INTELECTUAL</button>
+                <h3>TEMÁTICA</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.3. Temática
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe el contenido de un objeto según su temática. Temática es el nodo común a toda la categoría.<br>
+                    <strong>Relación de contraposición:</strong> Es abstracto, no es tangible
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('creencia-religiosa')">CREENCIA RELIGIOSA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('area-conocimiento')">ÁREA DE CONOCIMIENTO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('ideologia')">IDEOLOGÍA</button>
+                </div>
+
+                <div class="subsubsection-content" id="creencia-religiosa">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de un tema sobre creencia religiosa?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se discute sobre el tema del cristianismo.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El texto sobre el cristianismo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="area-conocimiento">
+                    <h4>ÁREA DE CONOCIMIENTO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('conocimiento-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ciencias-naturales')">CIENCIAS NATURALES</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ciencias-sociales')">CIENCIAS SOCIALES</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ciencias-computacionales')">CIENCIAS COMPUTACIONALES</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('humanidades-filosofia')">HUMANIDADES Y FILOSOFÍA</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="conocimiento-general">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tema sobre un área de conocimiento?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute sobre el tema "Matemáticas".
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La pregunta sobre termodinámica
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ciencias-naturales">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tema sobre un área de ciencias naturales?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute sobre el tema "Biología".
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión sobre genética
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ciencias-sociales">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tema sobre un área de ciencias sociales?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute sobre la historia de España.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El texto sobre sociología
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ciencias-computacionales">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tema sobre un área de ciencias computacionales?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute sobre la Inteligencia Artificial.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El informe sobre machine learning
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="humanidades-filosofia">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> ¿Se trata de un tema sobre un área de humanidades y filosofía?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se discute sobre la gramática de valencias.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El debate sobre hermenéutica
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="ideologia">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Qué conjunto de ideas representa?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Representa una ideología política.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El pensamiento liberal en el siglo XIX
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de SISTEMAS DE ORDEN -->
+            <div class="subsection-content" id="sistemas-orden">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a C.1. INTELECTUAL</button>
+                <h3>SISTEMAS DE ORDEN</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.4. Sistemas de orden
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe representantes del mundo intelectual en cuanto a su estructura o sistema. Sistemas de orden es el nodo común a toda la categoría.<br>
+                    <strong>Relación de contraposición:</strong> Es abstracto, no es tangible
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('economico-impuestos')">ECONÓMICO IMPUESTOS Y TASAS</button>
+                </div>
+
+                <div class="subsubsection-content" id="economico-impuestos">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de sistemas de ordenación económico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, los impuestos son sistemas ordenados, jerarquizados.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El aumento del impuesto de sociedades
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'C. Mundo Intelectual - Tabla Conceptual ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'C. Mundo Intelectual - Tabla Conceptual ▲';
+            }
+        }
+
+        // Función para botones colapsibles principales
+        document.addEventListener("DOMContentLoaded", function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        // Función para las subsecciones con botones estilo tarjeta
+        function toggleSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            
+            // Cerrar todas las subsecciones
+            allSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-subsecciones
+        function toggleSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const parentSection = content.closest('.subsection-content');
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                // Cerrar todas las sub-subsecciones del mismo nivel
+                allSubSubsections.forEach(section => {
+                    if (section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-subsecciones (cuarto nivel)
+        function toggleSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) {
+                console.log('No se encontró elemento con id:', id);
+                return;
+            }
+            
+            // Buscar el contenedor padre más específico
+            const parentSection = content.closest('.subsubsection-content');
+            if (parentSection) {
+                // Buscar todas las sub-sub-subsecciones dentro del mismo padre
+                const allSubSubSubsections = parentSection.querySelectorAll('.subsubsubsection-content');
+                
+                // Cerrar todas las sub-sub-subsecciones del mismo nivel
+                allSubSubSubsections.forEach(section => {
+                    if (section !== content && section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para cerrar todas las subsecciones (volver a categoría principal)
+        function closeAllSubsections() {
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            allSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-subsecciones de una subsección específica
+        function closeAllSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                allSubSubsections.forEach(section => {
+                    section.style.display = 'none';
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

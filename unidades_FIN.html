@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades - Taxonomía</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #9b59b6;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        h3 {
+            color: #8e44ad;
+            background: linear-gradient(90deg, #ecf0f1, transparent);
+            padding: 10px;
+            border-left: 4px solid #9b59b6;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #27ae60;
+            margin-top: 20px;
+        }
+        
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #9b59b6, #e74c3c, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 20px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #8e44ad, #732d91);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botones colapsibles principales */
+        .collapsible {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible:hover, .collapsible.active {
+            background: linear-gradient(135deg, #8e44ad, #732d91);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .content {
+            padding: 20px;
+            display: none;
+            overflow: hidden;
+            background: rgba(255,255,255,0.95);
+            border-left: 4px solid #9b59b6;
+            margin-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Botones de subsección estilo tarjeta */
+        .subsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .subsection-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsection-btn:hover {
+            background: linear-gradient(135deg, #d35400, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .subsection-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-subsecciones */
+        .subsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .subsubsection-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsection-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsection-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #9b59b6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-sub-subsecciones (cuarto nivel) */
+        .subsubsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .subsubsubsection-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsubsection-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsubsection-content {
+            display: none;
+            background: #fff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 2px solid #e74c3c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .nested-content {
+            margin-left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #9b59b6;
+            margin-top: 10px;
+        }
+        
+        .definition-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #9b59b6;
+        }
+        
+        .question-box {
+            background: #e8f6f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .answer-box {
+            background: #fdf2e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .example-box {
+            background: #f4f6f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-style: italic;
+        }
+        
+        /* Botón de retroceso */
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #34495e);
+            transform: translateY(-1px);
+        }
+        
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* Información de subcategoría */
+        .subcategory-info {
+            background: #e8e8f5;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-size: 14px;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        em {
+            color: #8e44ad;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unidades</h1>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            G. UNIDADES - Tabla Conceptual ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>G. UNIDADES</strong></td>
+                        <td>Representa tipos de unidades</td>
+                        <td><em>per negationem</em></td>
+                        <td>Diferencia unidades de diferentes tipos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- G.1. Unidad -->
+    <div class="section">
+        <button class="collapsible">G.1. Unidad</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia unidades frente a otros representantes de otros mundos<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Unidades de medición y ordenación cronológica
+            </div>
+            
+            <!-- Subcategorías principales -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('general-unidad')">GENERAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('tiempo')">TIEMPO</button>
+                <button class="subsection-btn" onclick="toggleSubsection('cantidad')">CANTIDAD</button>
+                <button class="subsection-btn" onclick="toggleSubsection('monetaria')">MONETARIA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('medida-espacial')">MEDIDA ESPACIAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('informacion-digital')">INFORMACIÓN DIGITAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('potencia')">POTENCIA</button>
+            </div>
+            
+            <!-- Contenido de GENERAL -->
+            <div class="subsection-content" id="general-unidad">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>GENERAL</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.1. General
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad de tiempo, espacio, monetaria, espacial, de potencia o de información digital?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una semana
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El cansancio de los lunes
+                </div>
+            </div>
+            
+            <!-- Contenido de TIEMPO -->
+            <div class="subsection-content" id="tiempo">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>TIEMPO</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.2. Tiempo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades de tiempo.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('tiempo-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('periodo')">PERÍODO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('semana')">SEMANA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('dia')">DÍA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('meses')">MESES</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('estacion')">ESTACIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('anos')">AÑOS</button>
+                </div>
+
+                <div class="subsubsection-content" id="tiempo-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo general?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de una semana
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El viaje de una semana
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="periodo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período histórico de tiempo?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, del Pleistoceno
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La vida en el Pleistoceno
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="semana">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo semanal?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, del martes
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La actividad del martes
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="dia">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de la mañana
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La fiesta por la noche
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="meses">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo mensual?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de marzo
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El cumpleaños en marzo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="estacion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo estacional?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, del verano
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La celebración de la primavera
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="anos">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un período de tiempo de años?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de los 80
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La música de los 80
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de CANTIDAD -->
+            <div class="subsection-content" id="cantidad">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>CANTIDAD</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.3. Cantidad
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades de cantidad.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('cantidad-general')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('numero')">NÚMERO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('porcentaje')">PORCENTAJE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('relacional')">RELACIONAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('numerica')">NUMÉRICA</button>
+                </div>
+
+                <div class="subsubsection-content" id="cantidad-general">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una cantidad?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de una tonelada
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El montón de libros
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="numero">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un número?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, del dos
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La mala suerte del trece
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="porcentaje">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de un porcentaje?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, del 25%
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Un aumento del 16%
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="relacional">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una cantidad numérica?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de la mitad
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El resto de los participantes
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="numerica">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una cantidad relacional?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, el trillón
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Un millón de participantes
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de MONETARIA -->
+            <div class="subsection-content" id="monetaria">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>MONETARIA</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.4. Monetaria
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades monetarias.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad monetaria?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, del euro
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La caída del dólar
+                </div>
+            </div>
+            
+            <!-- Contenido de MEDIDA ESPACIAL -->
+            <div class="subsection-content" id="medida-espacial">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>MEDIDA ESPACIAL</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.5. Medida espacial
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades de espacio.
+                </div>
+
+                <!-- Sub-subcategorías con cuarto nivel -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('espacio-lineal')">LINEAL</button>
+                </div>
+
+                <div class="subsubsection-content" id="espacio-lineal">
+                    <h4>LINEAL</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('objeto')">OBJETO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('superficie')">SUPERFICIE</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="objeto">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad de medida espacial lineal de un objeto?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, de centímetros
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Una base de 2 centímetros
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="superficie">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad de medida espacial lineal de una superficie?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, de yardas
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Una distancia de 20 km
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de INFORMACIÓN DIGITAL -->
+            <div class="subsection-content" id="informacion-digital">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>INFORMACIÓN DIGITAL</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.6. Información digital
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades de información digital.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad de información digital?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un byte
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> Una descarga a 10 megabytes por segundo
+                </div>
+            </div>
+            
+            <!-- Contenido de POTENCIA -->
+            <div class="subsection-content" id="potencia">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a G.1. Unidad</button>
+                <h3>POTENCIA</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.7. Potencia
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe unidades de potencia.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de una unidad. ¿Se trata de una unidad de potencia?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un vatio
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El precio del kilovatio
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'G. UNIDADES - Tabla Conceptual ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'G. UNIDADES - Tabla Conceptual ▲';
+            }
+        }
+
+        // Función para botones colapsibles principales
+        document.addEventListener("DOMContentLoaded", function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        // Función para las subsecciones con botones estilo tarjeta
+        function toggleSubsection(id) {
+            const content = document.getElementById(id);
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            
+            // Cerrar todas las subsecciones
+            allSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-subsecciones
+        function toggleSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const parentSection = content.closest('.subsection-content');
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                // Cerrar todas las sub-subsecciones del mismo nivel
+                allSubSubsections.forEach(section => {
+                    if (section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-subsecciones (cuarto nivel)
+        function toggleSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) {
+                console.log('No se encontró elemento con id:', id);
+                return;
+            }
+            
+            // Buscar el contenedor padre más específico
+            const parentSection = content.closest('.subsubsection-content');
+            if (parentSection) {
+                // Buscar todas las sub-sub-subsecciones dentro del mismo padre
+                const allSubSubSubsections = parentSection.querySelectorAll('.subsubsubsection-content');
+                
+                // Cerrar todas las sub-sub-subsecciones del mismo nivel
+                allSubSubSubsections.forEach(section => {
+                    if (section !== content && section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para cerrar todas las subsecciones (volver a categoría principal)
+        function closeAllSubsections() {
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            allSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-subsecciones de una subsección específica
+        function closeAllSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                allSubSubsections.forEach(section => {
+                    section.style.display = 'none';
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

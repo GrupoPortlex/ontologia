@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Situaciones Dinámicas - Taxonomía</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #FF6B35;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #FF6B35;
+            background: linear-gradient(90deg, #ecf0f1, transparent);
+            padding: 10px;
+            border-left: 4px solid #FF6B35;
+            margin-top: 25px;
+        }
+        
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #FF6B35, #e74c3c, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 20px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #FF6B35, #E85A2B);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #E85A2B, #d44720);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #FF6B35, #E85A2B);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botones colapsibles principales */
+        .collapsible {
+            background: linear-gradient(135deg, #FF6B35, #E85A2B);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible:hover, .collapsible.active {
+            background: linear-gradient(135deg, #E85A2B, #d44720);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 20px;
+            display: none;
+            overflow: hidden;
+            background: #f9f9f9;
+            border-left: 4px solid #FF6B35;
+            margin-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Botones de subsección estilo tarjeta */
+        .subsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .subsection-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsection-btn:hover {
+            background: linear-gradient(135deg, #d35400, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .subsection-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-subsecciones */
+        .subsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .subsubsection-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsection-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsection-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-sub-subsecciones (cuarto nivel) */
+        .subsubsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .subsubsubsection-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsubsection-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsubsection-content {
+            display: none;
+            background: #fff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 2px solid #e74c3c;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .nested-content {
+            margin-left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #FF6B35;
+            margin-top: 10px;
+        }
+        
+        .definition-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .question-box {
+            background: #e8f6f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .answer-box {
+            background: #fdf2e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .example-box {
+            background: #f4f6f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-style: italic;
+        }
+        
+        /* Botón de retroceso */
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #34495e);
+            transform: translateY(-1px);
+        }
+        
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* Información de subcategoría */
+        .subcategory-info {
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #34495e;
+            font-size: 14px;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        em {
+            color: #FF6B35;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Situaciones Dinámicas</h1>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            D. Situaciones Dinámicas - Tabla Conceptual ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>D. Situaciones Dinámicas</strong></td>
+                        <td>Representa procesos dinámicos: procesos, acciones, actividades y situaciones</td>
+                        <td><em>per negationem</em></td>
+                        <td>Son actividades, acciones y procesos ligados al dinamismo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- D.1. Situaciones dinámicas -->
+    <div class="section">
+        <button class="collapsible">D.1. Situaciones dinámicas</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia situaciones dinámicas frente a otros representantes de otros mundos.<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Son actividades, acciones y procesos ligados al dinamismo
+            </div>
+            
+            <!-- Subcategorías principales -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('humanas-volitivas')">HUMANAS VOLITIVAS O INTENCIONALES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('motrices')">MOTRICES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('naturales')">NATURALES</button>
+                <button class="subsection-btn" onclick="toggleSubsection('acontecimientos')">ACONTECIMIENTOS</button>
+                <button class="subsection-btn" onclick="toggleSubsection('actividades-acciones')">ACTIVIDADES Y ACCIONES</button>
+            </div>
+            
+            <!-- Contenido de HUMANAS VOLITIVAS O INTENCIONALES -->
+            <div class="subsection-content" id="humanas-volitivas">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a D.1. Situaciones dinámicas</button>
+                <h3>HUMANAS VOLITIVAS O INTENCIONALES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.1. Situaciones dinámicas humanas volitivas o intencionales
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe procesos que implican dinamismo con participación humana volitiva o intencional. Dinamismo es el nodo común a la categoría.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-humanas')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('medico')">MÉDICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('violencia')">VIOLENCIA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('formacion')">FORMACIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('tiempo-libre')">TIEMPO LIBRE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('trabajo')">TRABAJO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('cognitivo-intelectual')">COGNITIVO O INTELECTUAL</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-humanas">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> ¿Se trata de una situación dinámica realizada por un humano?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de un atropello.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El atraco al banco
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="medico">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso o acción de tipo médico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí se trata de una operación planificada.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El dolor de la operación
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="violencia">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso o acción violenta?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de un atraco a mano armada.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La muerte por disparos
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="formacion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso o acción para la formación?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de un entrenamiento para atletas de altas capacidades.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El entrenamiento del atleta
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="tiempo-libre">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso o acción de tiempo libre?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de una escapada de fin de semana.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La escapada a la montaña
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="trabajo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso o acción laboral?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata del teletrabajo.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Los negocios del directivo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="cognitivo-intelectual">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso cognitivo o intelectual?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de una reflexión.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El razonamiento del filósofo
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de MOTRICES -->
+            <div class="subsection-content" id="motrices">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a D.1. Situaciones dinámicas</button>
+                <h3>MOTRICES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.2. Situaciones dinámicas motrices
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe procesos que implican motricidad.
+                </div>
+
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso que implica cambio motriz?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, se trata de un bofetón de una niña mayor a una niña pequeña.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El dolor del golpe/bofetón
+                </div>
+            </div>
+            
+            <!-- Contenido de NATURALES -->
+            <div class="subsection-content" id="naturales">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a D.1. Situaciones dinámicas</button>
+                <h3>NATURALES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.3. Situaciones dinámicas naturales
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe procesos naturales.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-naturales')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('biologico')">BIOLÓGICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('quimico')">QUÍMICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('combustion')">COMBUSTIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('meteorologico')">METEOROLÓGICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('patologico')">PATOLÓGICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('floracion')">FLORACIÓN</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-naturales">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, de un terremoto.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La erosión de la naturaleza
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="biologico">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural biológico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es un parto.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El dolor del parto
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="quimico">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural químico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la combustión.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El dolor de la quemadura/digestión
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="combustion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural de combustión?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de un incendio.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La erupción del volcán
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="meteorologico">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural meteorológico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la tormenta.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El ruido de la tormenta
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="patologico">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural patológico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí se trata de un infarto.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La muerte por infarto
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="floracion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un proceso natural biológico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la floración.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El olor de la floración
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de ACONTECIMIENTOS -->
+            <div class="subsection-content" id="acontecimientos">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a D.1. Situaciones dinámicas</button>
+                <h3>ACONTECIMIENTOS</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.4. Situaciones dinámicas como acontecimientos
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe procesos resultativos, causativos o no puntuales como acontecimientos.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-acontecimientos')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('origen')">ORIGEN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('resultado')">RESULTADO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('contratiempo')">CONTRATIEMPO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('encuentro')">ENCUENTRO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('efectivo')">EFECTIVO</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-acontecimientos">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es un suceso.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El nerviosismo del acontecimiento
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="origen">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento como origen?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la causa.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El motivo de la pelea
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="resultado">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento resultativo?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, surgen/se obtienen resultados.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El desenlace de la situación
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="contratiempo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento definido como contratiempo?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, surge un contratiempo.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El retraso del viaje por el atasco
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="encuentro">
+                    <h4>ENCUENTRO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('reunion')">REUNIÓN</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ceremonia')">CEREMONIA</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="reunion">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento definido como reunión?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, tiene lugar una conferencia.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La organización de la conferencia
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ceremonia">
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento definido como ceremonia?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, tiene lugar una boda.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La preparación de la boda
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="efectivo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de un evento efectivo?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, el nacimiento del bebé.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La muerte por accidente/caída
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de ACTIVIDADES Y ACCIONES -->
+            <div class="subsection-content" id="actividades-acciones">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a D.1. Situaciones dinámicas</button>
+                <h3>ACTIVIDADES Y ACCIONES</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.5. Situaciones dinámicas como actividades y acciones
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe procesos ligados a actividades o acciones.
+                </div>
+
+                <!-- Sub-subcategorías -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-actividades')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('cambio')">CAMBIO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('economicas')">ECONÓMICAS</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('intencionales')">INTENCIONALES</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('empresariales')">EMPRESARIALES</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('educativas')">EDUCATIVAS</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('deportivas')">DEPORTIVAS</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('sociales')">SOCIALES</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-actividades">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la exportación.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La emigración a América
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="cambio">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción que implica cambio?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la modernización.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La pregunta sobre la modernización
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="economicas">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción de tipo económico?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de una actividad, la de la re-industrialización.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El aumento de la industrialización
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="intencionales">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción intencional?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la preparación.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión de las prácticas/de la preparación/del intento
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="empresariales">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción de tipo empresarial?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de la actividad de la ganadería.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El aumento de la ganadería, del comercio
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="educativas">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción ligada a la educación?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de repasar.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La pregunta de repaso
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="deportivas">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción ligada al deporte?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de baloncesto.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El partido de Waterpolo
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="sociales">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Se trata de una situación dinámica ¿Se trata de una actividad o acción de carácter social?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, se trata de activismo climático.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La relevancia del activismo climático
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'D. Situaciones Dinámicas - Tabla Conceptual ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'D. Situaciones Dinámicas - Tabla Conceptual ▲';
+            }
+        }
+
+        // Función para botones colapsibles principales
+        document.addEventListener("DOMContentLoaded", function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        // Función para las subsecciones con botones estilo tarjeta
+        function toggleSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            
+            // Cerrar todas las subsecciones
+            allSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-subsecciones
+        function toggleSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            
+            const parentSection = content.closest('.subsection-content');
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                // Cerrar todas las sub-subsecciones del mismo nivel
+                allSubSubsections.forEach(section => {
+                    if (section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-subsecciones (cuarto nivel)
+        function toggleSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            if (!content) {
+                console.log('No se encontró elemento con id:', id);
+                return;
+            }
+            
+            // Buscar el contenedor padre más específico
+            const parentSection = content.closest('.subsubsection-content');
+            if (parentSection) {
+                // Buscar todas las sub-sub-subsecciones dentro del mismo padre
+                const allSubSubSubsections = parentSection.querySelectorAll('.subsubsubsection-content');
+                
+                // Cerrar todas las sub-sub-subsecciones del mismo nivel
+                allSubSubSubsections.forEach(section => {
+                    if (section !== content && section.id !== id) {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Toggle la sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para cerrar todas las subsecciones (volver a categoría principal)
+        function closeAllSubsections() {
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            allSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-subsecciones de una subsección específica
+        function closeAllSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            if (parentSection) {
+                const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+                
+                allSubSubsections.forEach(section => {
+                    section.style.display = 'none';
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

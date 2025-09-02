@@ -1,0 +1,1592 @@
+                <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Animado - Taxonomía</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            background: linear-gradient(90deg, #ecf0f1, transparent);
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin-top: 25px;
+        }
+        
+        .section-divider {
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        /* Tabla conceptual desplegable */
+        .table-dropdown {
+            margin: 20px 0;
+        }
+        
+        .table-toggle {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-toggle:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .table-content {
+            display: none;
+            margin-top: 10px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .concept-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .concept-table th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .concept-table td {
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .concept-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Botones colapsibles principales */
+        .collapsible {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible:hover, .collapsible.active {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 20px;
+            display: none;
+            overflow: hidden;
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Botones de subsección estilo tarjeta */
+        .subsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .subsection-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsection-btn:hover {
+            background: linear-gradient(135deg, #d35400, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .subsection-content {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-subsecciones */
+        .subsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .subsubsection-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsection-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsection-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 3px solid #9b59b6;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Botones para sub-sub-subsecciones */
+        .subsubsubsection-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .subsubsubsection-btn {
+            background: linear-gradient(135deg, #16a085, #138d75);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .subsubsubsection-btn:hover {
+            background: linear-gradient(135deg, #138d75, #117864);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .subsubsubsection-content {
+            display: none;
+            background: #ffffff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 2px solid #16a085;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .nested-content {
+            margin-left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+            margin-top: 10px;
+        }
+        
+        .definition-box {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .question-box {
+            background: #e8f6f3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .answer-box {
+            background: #fdf2e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .example-box {
+            background: #f4f6f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #9b59b6;
+            font-style: italic;
+        }
+        
+        /* Botón de retroceso */
+        .back-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #7f8c8d, #34495e);
+            transform: translateY(-1px);
+        }
+        
+        .back-btn::before {
+            content: "← ";
+        }
+
+        /* Información de subcategoría */
+        .subcategory-info {
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #34495e;
+            font-size: 14px;
+        }
+        
+        strong {
+            color: #2c3e50;
+        }
+        
+        em {
+            color: #8e44ad;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mundo Animado</h1>
+
+    <!-- Tabla conceptual desplegable -->
+    <div class="table-dropdown">
+        <button class="table-toggle" onclick="toggleTable()">
+            A. Mundo Animado - Tabla Conceptual ▼
+        </button>
+        <div class="table-content" id="conceptTable">
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Mundo</th>
+                        <th>Descripción general</th>
+                        <th>Relación de contraposición</th>
+                        <th>Relación específica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A. Mundo Animado</strong></td>
+                        <td>Presenta seres vivos</td>
+                        <td><em>per negationem</em></td>
+                        <td>Es un ser vivo, parte de un ser vivo o grupo. Puede respirar</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- A.1. Ser Humano -->
+    <div class="section">
+        <button class="collapsible">A.1. Ser Humano</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia ser humano frente a otros representantes del mundo animado<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es un ser vivo, parte de un ser vivo o grupo. Puede respirar
+            </div>
+            
+            <!-- Subcategorías principales de Ser Humano -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('condicion-relacion')">CONDICIÓN Y RELACIÓN</button>
+                <button class="subsection-btn" onclick="toggleSubsection('actividad')">ACTIVIDAD</button>
+                <button class="subsection-btn" onclick="toggleSubsection('pensamiento-creencia')">PENSAMIENTO Y CREENCIA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('organizaciones-grupos')">ORGANIZACIONES Y GRUPOS</button>
+            </div>
+            
+            <!-- Contenido de CONDICIÓN Y RELACIÓN -->
+            <div class="subsection-content" id="condicion-relacion">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a A.1. Ser Humano</button>
+                <h3>CONDICIÓN Y RELACIÓN</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.1. Condición y relación
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Seres humanos según su condición o relación. Condición y relación son el nodo común a toda la categoría.
+                </div>
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Es un ser vivo? ¿Puede hablar?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La presencia de los niños
+                </div>
+
+                <!-- Sub-subcategorías de Condición y Relación -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-condicion')">GENERAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('origen')">ORIGEN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('familia')">FAMILIA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('personaje-historico')">PERSONAJE HISTÓRICO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('titulo')">TÍTULO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('condicion-humana')">CONDICIÓN HUMANA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('agente-actor')">AGENTE O ACTOR</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('apellidos')">APELLIDOS</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('nombre-propio-cr')">NOMBRE PROPIO</button>
+                </div>
+
+                <!-- Contenidos de las sub-subsecciones -->
+                <div class="subsubsection-content" id="general-condicion">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Es un ser vivo? ¿Puede hablar?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia de los niños
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="origen">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿De dónde es o procede?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Es europeo.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia de los europeos
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="familia">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Qué relación de parentesco tiene con otra persona?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Es el hijo de Mario.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión con el padre
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="personaje-historico">
+                    <button class="back-btn" onclick="closeAllSubSubSubsections('personaje-historico')">Volver a Condición y Relación</button>
+                    <h4>PERSONAJE HISTÓRICO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ph-nombre-propio')">NOMBRE PROPIO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ph-apellido')">APELLIDO</button>
+                    </div>
+                    
+                    <div class="subsubsubsection-content" id="ph-nombre-propio">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ph-nombre-propio')">Volver a Personaje Histórico</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Personaje descrito según una condición y relación: ¿Cómo se llamaba el personaje histórico?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Se llama Julio César.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El texto sobre Cleopatra
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ph-apellido">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ph-apellido')">Volver a Personaje Histórico</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Cómo se llamaba el personaje histórico?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Su apellido es Aristóteles.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> Los libros de Sócrates son interesantes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="titulo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Qué título tiene?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Es doctor en Filología.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Los graduados celebran hoy su fiesta
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="condicion-humana">
+                    <button class="back-btn" onclick="closeAllSubSubSubsections('condicion-humana')">Volver a Condición y Relación</button>
+                    <h4>CONDICIÓN HUMANA</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-negativa')">NEGATIVA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-positiva')">POSITIVA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-desplazamiento')">DESPLAZAMIENTO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-medicina')">MEDICINA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-educacion')">EDUCACIÓN</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('ch-habitante')">HABITANTE</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-negativa">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-negativa')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación negativa?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, la considero mi enemiga.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La enfermedad del inválido/pedigüeño
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-positiva">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-positiva')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación positiva?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, la considero mi compañera.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión con el amigo
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-desplazamiento">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-desplazamiento')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación de desplazamiento?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, está desplazado.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La huida del refugiado/nómada
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-medicina">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-medicina')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación médica?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, está convaleciente.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La estancia del enfermo
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-educacion">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-educacion')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación educacional?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es alumno de la Facultad.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La pregunta del estudiante
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="ch-habitante">
+                        <button class="back-btn" onclick="closeSubSubSubsection('ch-habitante')">Volver a Condición Humana</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Se encuentra en una condición/situación habitacional?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es el inquilino.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión con el vecino
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="agente-actor">
+                    <button class="back-btn" onclick="closeAllSubSubSubsections('agente-actor')">Volver a Condición y Relación</button>
+                    <h4>AGENTE O ACTOR</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('aa-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('aa-positivo')">ACTO POSITIVO</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('aa-negativo')">ACTO NEGATIVO</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="aa-general">
+                        <button class="back-btn" onclick="closeSubSubSubsection('aa-general')">Volver a Agente o Actor</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Realiza una acción?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, se manifiesta.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El grupo de manifestantes
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="aa-positivo">
+                        <button class="back-btn" onclick="closeSubSubSubsection('aa-positivo')">Volver a Agente o Actor</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Realiza una acción positiva?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es donante de sangre.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El inventor de la rueda
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="aa-negativo">
+                        <button class="back-btn" onclick="closeSubSubSubsection('aa-negativo')">Volver a Agente o Actor</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Realiza una acción negativa?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, porque es un ladrón.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La huida del bandido/asesino
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="apellidos">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Cómo se apellida?, ¿Es su apellido Hernández?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Se apellida Hernández.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia del Sr. Hernández
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="nombre-propio-cr">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según una condición y relación: ¿Cómo se llama?, ¿Es su nombre Juan?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Se llama Ramón.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La pregunta de Pedro
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de ACTIVIDAD -->
+            <div class="subsection-content" id="actividad">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a A.1. Ser Humano</button>
+                <h3>ACTIVIDAD</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.2. Actividades
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe representantes humanos según diferentes tipos de actividades. Actividades es el nodo común a toda la categoría.
+                </div>
+
+                <!-- Sub-subcategorías de Actividad -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('cargo')">CARGO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('profesion')">PROFESIÓN</button>
+                </div>
+
+                <div class="subsubsection-content" id="cargo">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según su actividad: ¿Qué cargo desempeña?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Es el alcalde, realiza las funciones de decana.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La pregunta de la decana
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="profesion">
+                    <button class="back-btn" onclick="closeAllSubSubsections('actividad')">Volver a Actividad</button>
+                    <h4>PROFESIÓN</h4>
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según su actividad: ¿De qué trabaja? ¿para qué ha estudiado?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Trabaja de peluquero; ha estudiado para profesor, para electricista.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia de los bomberos
+                    </div>
+
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('prof-educacion')">EDUCACIÓN</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="prof-educacion">
+                        <button class="back-btn" onclick="closeSubSubSubsection('prof-educacion')">Volver a Profesión</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según su actividad: ¿Trabaja en el campo de la educación? ¿Ha estudiado para trabajar como educador?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es profesor.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión con el profesor
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de PENSAMIENTO Y CREENCIA -->
+            <div class="subsection-content" id="pensamiento-creencia">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a A.1. Ser Humano</button>
+                <h3>PENSAMIENTO Y CREENCIA</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.3. Pensamiento y Creencia
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe representantes humanos según su pensamiento o creencia. Pensamiento y creencia son los nodos comunes a toda la categoría.
+                </div>
+
+                <!-- Sub-subcategorías de Pensamiento y Creencia -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('creencia-religiosa')">CREENCIA RELIGIOSA</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('ideologia-politica')">IDEOLOGÍA POLÍTICA</button>
+                </div>
+
+                <div class="subsubsection-content" id="creencia-religiosa">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según su creencia religiosa: ¿Es creyente? ¿Cuál es su creencia?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es católico.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia de los cristianos
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="ideologia-politica">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. Persona descrita según su ideología política: ¿Cuál es su ideología política?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Es socialista.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La discusión con los socialistas
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de ORGANIZACIONES Y GRUPOS -->
+            <div class="subsection-content" id="organizaciones-grupos">
+                <button class="back-btn" onclick="closeAllSubsections()">Volver a A.1. Ser Humano</button>
+                <h3>ORGANIZACIONES Y GRUPOS</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 1.4. Organizaciones y grupos
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe organizaciones y grupos humanos según su tipología. Organizaciones y grupos son los nodos comunes a toda la categoría.
+                </div>
+
+                <!-- Sub-subcategorías de Organizaciones y Grupos -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('asociacion-tiempo-libre')">ASOCIACIÓN TIEMPO LIBRE</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('organizacion')">ORGANIZACIÓN</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('grupo-colectivo')">GRUPO O COLECTIVO</button>
+                </div>
+
+                <div class="subsubsection-content" id="asociacion-tiempo-libre">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una asociación de tiempo libre?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el club de lectura.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La presencia en el club
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="organizacion">
+                    <button class="back-btn" onclick="closeAllSubSubsections('organizaciones-grupos')">Volver a Organizaciones y Grupos</button>
+                    <h4>ORGANIZACIÓN</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-politica')">POLÍTICA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-educativa')">EDUCATIVA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-militar')">MILITAR</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-empresarial')">EMPRESARIAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-gubernamental')">GUBERNAMENTAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-medica')">MÉDICA</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-virtual')">VIRTUAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('org-pais')">PAÍS</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-general">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-general')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una institución o asociación.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La ayuda de la Cruz Roja
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-politica">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-politica')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización política?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización política.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión con la ONU
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-educativa">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-educativa')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización educativa?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización educativa.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La pregunta de la universidad
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-militar">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-militar')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización militar?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización militar.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La huida de la Gestapo
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-empresarial">
+                        <button class="back-btn" onclick="closeAllSubSubSubSubsections('org-empresarial')">Volver a Organización</button>
+                        <h5>EMPRESARIAL</h5>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización empresarial?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización empresarial.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El texto de la editorial
+                        </div>
+                        
+                        <!-- Sub-sub-subcategorías de EMPRESARIAL -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin: 10px 0;">
+                            <button style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border: none; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 11px; cursor: pointer; transition: all 0.3s ease; text-align: center;" onclick="toggleSubSubSubSubsection('emp-general')">GENERAL</button>
+                            <button style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white; border: none; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 11px; cursor: pointer; transition: all 0.3s ease; text-align: center;" onclick="toggleSubSubSubSubsection('emp-cadena')">CADENA</button>
+                        </div>
+
+                        <div id="emp-general" style="display: none; background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 2px solid #2c3e50;">
+                            <button class="back-btn" onclick="closeSubSubSubSubsection('emp-general')">Volver a Empresarial</button>
+                            <div class="question-box">
+                                <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización empresarial general?
+                            </div>
+                            <div class="answer-box">
+                                <strong>Respuesta:</strong> Sí, es una editorial.
+                            </div>
+                            <div class="example-box">
+                                <strong>Ejemplo:</strong> El texto de la editorial / La conservera del pueblo
+                            </div>
+                        </div>
+
+                        <div id="emp-cadena" style="display: none; background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 2px solid #2c3e50;">
+                            <button class="back-btn" onclick="closeSubSubSubSubsection('emp-cadena')">Volver a Empresarial</button>
+                            <div class="question-box">
+                                <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización televisiva?
+                            </div>
+                            <div class="answer-box">
+                                <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización o grupo televisivo.
+                            </div>
+                            <div class="example-box">
+                                <strong>Ejemplo:</strong> La discusión con Antena 3 / El informe de RTVE
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-gubernamental">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-gubernamental')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización gubernamental?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una institución del gobierno.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La presencia en el parlamento
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-medica">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-medica')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización médica?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una institución médica.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> El informe del hospital
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-virtual">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-virtual')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización virtual?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización virtual.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión en Facebook
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="org-pais">
+                        <button class="back-btn" onclick="closeSubSubSubsection('org-pais')">Volver a Organización</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una organización institucional territorial?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas de una organización territorial.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La presencia de España en la cumbre
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="grupo-colectivo">
+                    <button class="back-btn" onclick="closeAllSubSubsections('organizaciones-grupos')">Volver a Organizaciones y Grupos</button>
+                    <h4>GRUPO O COLECTIVO</h4>
+                    <div class="subsubsubsection-buttons">
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('gc-general')">GENERAL</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('gc-militar')">MILITAR</button>
+                        <button class="subsubsubsection-btn" onclick="toggleSubSubSubsection('gc-grupo')">GRUPO (REUNIÓN)</button>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="gc-general">
+                        <button class="back-btn" onclick="closeSubSubSubsection('gc-general')">Volver a Grupo o Colectivo</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un grupo o colectivo?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas que forman un grupo o colectivo.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La presencia del equipo
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="gc-militar">
+                        <button class="back-btn" onclick="closeSubSubSubsection('gc-militar')">Volver a Grupo o Colectivo</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un grupo o colectivo militar?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas que forman un grupo o colectivo militar.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La huida de infantería
+                        </div>
+                    </div>
+
+                    <div class="subsubsubsection-content" id="gc-grupo">
+                        <button class="back-btn" onclick="closeSubSubSubsection('gc-grupo')">Volver a Grupo o Colectivo</button>
+                        <div class="question-box">
+                            <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una reunión de un grupo o colectivo?
+                        </div>
+                        <div class="answer-box">
+                            <strong>Respuesta:</strong> Sí, es un conjunto de personas reunidas que forman un grupo o colectivo.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ejemplo:</strong> La discusión del coloquio
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- A.2. Criaturas -->
+    <div class="section">
+        <button class="collapsible">A.2. Criaturas</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia criaturas frente a otros representantes del mundo animado<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es un ser de ficción. Puede respirar
+            </div>
+            
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('criaturas-general')">GENERAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('criaturas-nombre')">NOMBRE PROPIO</button>
+            </div>
+            
+            <div class="subsection-content" id="criaturas-general">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un ser de ficción con características humanas? ¿Qué es?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Es una bruja.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El texto sobre el monstruo
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="criaturas-nombre">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un ser de ficción con características humanas? ¿Cómo se llama? ¿Es su nombre propio?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Es Pocahontas.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La huida de Mickey Mouse
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- A.3. Animales -->
+    <div class="section">
+        <button class="collapsible">A.2. Animales</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia representantes del mundo animal frente a otros representantes del mundo animado<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es un ser vivo, parte de un ser vivo o grupo. Puede respirar
+            </div>
+            
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('animales-general')">GENERAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('mamifero')">MAMÍFERO</button>
+                <button class="subsection-btn" onclick="toggleSubsection('ave')">AVE</button>
+                <button class="subsection-btn" onclick="toggleSubsection('pez')">PEZ</button>
+                <button class="subsection-btn" onclick="toggleSubsection('reptil')">REPTIL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('insecto')">INSECTO</button>
+            </div>
+            
+            <div class="subsection-content" id="animales-general">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un animal?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un animal.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El olor de los cerdos
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="mamifero">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un mamífero?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un perro.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El olfato del perro
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="ave">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un ave?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un águila.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La locuacidad del loro
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="pez">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un pez?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un tiburón.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El color del salmonete
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="reptil">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un reptil?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una culebra.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El ataque del cocodrilo
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="insecto">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un insecto?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una libélula.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El zumbido de la mosca
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- A.4. Vegetales -->
+    <div class="section">
+        <button class="collapsible">A.4. Vegetales</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia representantes del mundo vegetal frente a otros representantes del mundo animado<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es un ser vivo. Puede respirar/fotosíntesis
+            </div>
+            
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('planta')">PLANTA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('arbol')">ÁRBOL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('flor')">FLOR</button>
+                <button class="subsection-btn" onclick="toggleSubsection('fruta')">FRUTA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('hortaliza')">HORTALIZA</button>
+                <button class="subsection-btn" onclick="toggleSubsection('especies')">ESPECIES Y CONDIMENTOS</button>
+            </div>
+            
+            <div class="subsection-content" id="planta">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una flor.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La belleza de las gardenias
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="arbol">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal? ¿Es un árbol?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un eucalipto.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El olor de los naranjos
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="flor">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal? ¿Es una flor?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es un clavel.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El color de las rosas
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="fruta">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal? ¿Es una fruta?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una naranja.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El sabor de las fresas
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="hortaliza">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal? ¿Es una hortaliza?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es una cebolla.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El olor de la zanahoria
+                </div>
+            </div>
+            
+            <div class="subsection-content" id="especies">
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo vegetal. ¿Es un ser vivo y pertenece al mundo vegetal? ¿Es una especie o condimento?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es canela.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La carne a la pimienta
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- A.5. Partes del Cuerpo -->
+    <div class="section">
+        <button class="collapsible">A.5. Partes del Cuerpo</button>
+        <div class="content">
+            <div class="definition-box">
+                <strong>Descripción general:</strong> Diferencia partes de seres vivos frente a otros representantes del mundo animado<br>
+                <strong>Relación de contraposición:</strong> per negationem<br>
+                <strong>Relación específica:</strong> Es una parte de un ser vivo
+            </div>
+            
+            <!-- Botones estilo tarjeta para las subsecciones -->
+            <div class="subsection-buttons">
+                <button class="subsection-btn" onclick="toggleSubsection('general-cuerpo')">GENERAL</button>
+                <button class="subsection-btn" onclick="toggleSubsection('externa-humano')">EXTERNA (HUMANO)</button>
+                <button class="subsection-btn" onclick="toggleSubsection('recubrimiento-humano')">RECUBRIMIENTO (HUMANO)</button>
+                <button class="subsection-btn" onclick="toggleSubsection('interna-musculos-huesos')">INTERNA (MÚSCULOS Y HUESOS)</button>
+                <button class="subsection-btn" onclick="toggleSubsection('organos-humano')">ÓRGANOS (HUMANO)</button>
+            </div>
+            
+            <!-- Contenido de GENERAL -->
+            <div class="subsection-content" id="general-cuerpo">
+                <h3>GENERAL</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 5.1. Partes del cuerpo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe partes del cuerpo o seres vivos. Parte del cuerpo es el nodo común a la categoría.
+                </div>
+
+                <!-- Sub-subcategorías de General -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-humano')">HUMANO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-animal')">ANIMAL</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('general-vegetal')">VEGETAL</button>
+                </div>
+
+                <div class="subsubsection-content" id="general-humano">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte del cuerpo de un ser humano?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la mano.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El dolor de los pies cansados
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="general-animal">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte del cuerpo de un animal?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es una garra.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La rotura de la pata
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="general-vegetal">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte de un vegetal?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el tallo de una flor.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> El tronco de los castaños
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de EXTERNA (HUMANO) -->
+            <div class="subsection-content" id="externa-humano">
+                <h3>EXTERNA (HUMANO)</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 5.1. Partes del cuerpo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe partes del cuerpo o seres vivos. Parte del cuerpo es el nodo común a la categoría.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte del cuerpo externa de un ser humano?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es la cabeza del bebé.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> El dolor de espalda
+                </div>
+            </div>
+            
+            <!-- Contenido de RECUBRIMIENTO (HUMANO) -->
+            <div class="subsection-content" id="recubrimiento-humano">
+                <h3>RECUBRIMIENTO (HUMANO)</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 5.1. Partes del cuerpo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe partes del cuerpo o seres vivos. Parte del cuerpo es el nodo común a la categoría.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un recubrimiento de una parte del cuerpo de un ser humano?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es el pelo.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La piel del bebé
+                </div>
+            </div>
+            
+            <!-- Contenido de INTERNA (MÚSCULOS Y HUESOS) -->
+            <div class="subsection-content" id="interna-musculos-huesos">
+                <h3>INTERNA (MÚSCULOS Y HUESOS)</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 5.1. Partes del cuerpo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe partes del cuerpo o seres vivos. Parte del cuerpo es el nodo común a la categoría.
+                </div>
+
+                <!-- Sub-subcategorías de Interna -->
+                <div class="subsubsection-buttons">
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('interna-humano')">HUMANO</button>
+                    <button class="subsubsection-btn" onclick="toggleSubSubsection('interna-animal')">ANIMAL</button>
+                </div>
+
+                <div class="subsubsection-content" id="interna-humano">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte interna del cuerpo de un ser humano?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es el radio.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La rotura del peroné
+                    </div>
+                </div>
+
+                <div class="subsubsection-content" id="interna-animal">
+                    <div class="question-box">
+                        <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es una parte interna del cuerpo de un animal?
+                    </div>
+                    <div class="answer-box">
+                        <strong>Respuesta:</strong> Sí, es la quilla.
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> La desviación de la coracoides
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido de ÓRGANOS (HUMANO) -->
+            <div class="subsection-content" id="organos-humano">
+                <h3>ÓRGANOS (HUMANO)</h3>
+                <div class="subcategory-info">
+                    <strong>Subcategoría:</strong> 5.1. Partes del cuerpo
+                </div>
+                <div class="definition-box">
+                    <strong>Definición:</strong> Describe partes del cuerpo o seres vivos. Parte del cuerpo es el nodo común a la categoría.
+                </div>
+                
+                <div class="question-box">
+                    <strong>Pregunta:</strong> Pertenece al mundo animado. ¿Es un órgano del cuerpo de un ser humano?
+                </div>
+                <div class="answer-box">
+                    <strong>Respuesta:</strong> Sí, es el hígado.
+                </div>
+                <div class="example-box">
+                    <strong>Ejemplo:</strong> La inflamación de ovarios
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para la tabla conceptual desplegable
+        function toggleTable() {
+            const content = document.getElementById('conceptTable');
+            const button = document.querySelector('.table-toggle');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.innerHTML = 'A. Mundo Animado - Tabla Conceptual ▼';
+            } else {
+                content.style.display = 'block';
+                button.innerHTML = 'A. Mundo Animado - Tabla Conceptual ▲';
+            }
+        }
+
+        // Función para botones colapsibles principales
+        document.addEventListener("DOMContentLoaded", function() {
+            var coll = document.getElementsByClassName("collapsible");
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        });
+
+        // Función para las subsecciones con botones estilo tarjeta
+        function toggleSubsection(id) {
+            const content = document.getElementById(id);
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            
+            // Cerrar todas las subsecciones
+            allSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-subsecciones
+        function toggleSubSubsection(id) {
+            const content = document.getElementById(id);
+            const parentSection = content.closest('.subsection-content');
+            const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+            
+            // Cerrar todas las sub-subsecciones del mismo nivel
+            allSubSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-subsecciones
+        function toggleSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            const parentSection = content.closest('.subsubsection-content');
+            const allSubSubSubsections = parentSection.querySelectorAll('.subsubsubsection-content');
+            
+            // Cerrar todas las sub-sub-subsecciones del mismo nivel
+            allSubSubSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para las sub-sub-sub-subsecciones (nivel EMPRESARIAL)
+        function toggleSubSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            const parentSection = content.closest('.subsubsubsection-content');
+            const allSubSubSubSubsections = parentSection.querySelectorAll('[id^="emp-"]');
+            
+            // Cerrar todas las sub-sub-sub-subsecciones del mismo nivel
+            allSubSubSubSubsections.forEach(section => {
+                if (section.id !== id) {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Toggle la sub-sub-sub-subsección seleccionada
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // Función para cerrar sub-sub-subsecciones específicas
+        function closeSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            content.style.display = 'none';
+        }
+
+        // Función para cerrar sub-sub-sub-subsecciones específicas
+        function closeSubSubSubSubsection(id) {
+            const content = document.getElementById(id);
+            content.style.display = 'none';
+        }
+
+        // Función para cerrar todas las subsecciones (volver a categoría principal)
+        function closeAllSubsections() {
+            const allSubsections = document.querySelectorAll('.subsection-content');
+            allSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-subsecciones de una subsección específica
+        function closeAllSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            const allSubSubsections = parentSection.querySelectorAll('.subsubsection-content');
+            
+            allSubSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Función para cerrar todas las sub-sub-sub-subsecciones de una sección
+        function closeAllSubSubSubSubsections(parentId) {
+            const parentSection = document.getElementById(parentId);
+            const allSubSubSubSubsections = parentSection.querySelectorAll('[id^="emp-"]');
+            
+            allSubSubSubSubsections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+    </script>
+
+</body>
+</html>
